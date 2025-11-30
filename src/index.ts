@@ -1,5 +1,11 @@
 #!/usr/bin/env node
 
+/**
+ * @fileoverview Main entry point for gptinvoice CLI.
+ * Orchestrates the invoice download workflow: authentication, portal access, and PDF downloads.
+ * @module index
+ */
+
 import puppeteer from 'puppeteer';
 import { parseArgs, printHelp } from './cli';
 import { loadConfig, saveConfig, configExists, deleteConfig, getConfigPath } from './config';
@@ -8,6 +14,12 @@ import { printTokenInstructions, promptForToken } from './prompt';
 import { getInvoiceUrls, downloadInvoice, filterInvoicesByMonth } from './download';
 import { setDebugEnabled, debug } from './debug';
 
+/**
+ * Gets a valid access token, prompting the user if necessary.
+ * First checks for a saved token and verifies it's still valid.
+ * If no valid token exists, displays instructions and prompts for input.
+ * @returns A verified valid access token
+ */
 async function getValidAccessToken(): Promise<string> {
   const config = loadConfig();
 
@@ -54,6 +66,11 @@ async function getValidAccessToken(): Promise<string> {
   }
 }
 
+/**
+ * Main application entry point.
+ * Parses CLI arguments, handles authentication, and downloads invoices.
+ * Exits with code 0 on success, 1 on error.
+ */
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
   const options = parseArgs(args);

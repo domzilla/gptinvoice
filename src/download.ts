@@ -1,19 +1,45 @@
+/**
+ * @fileoverview Invoice downloading functionality using Puppeteer.
+ * Handles navigating the Stripe billing portal and downloading invoice PDFs.
+ * Uses Chrome DevTools Protocol (CDP) for reliable file downloads.
+ * @module download
+ */
+
 import * as fs from 'fs';
 import * as path from 'path';
 import type { Browser, Page } from 'puppeteer';
 import { debug, debugError } from './debug';
 
+/**
+ * Represents an invoice found in the billing portal.
+ */
 export interface Invoice {
+  /** URL to the invoice detail page */
   url: string;
+  /** Human-readable date string (e.g., "Jan 15, 2024" or "2024-01-15") */
   date: string;
 }
 
+/**
+ * Result of a download operation.
+ */
 export interface DownloadResult {
+  /** Whether the download succeeded */
   success: boolean;
+  /** Path to the downloaded file (if successful) */
   filePath?: string;
+  /** Error message (if failed) */
   error?: string;
 }
 
+/**
+ * Navigates to the billing portal and extracts all invoice URLs.
+ * Looks for links with data-testid="hip-link" and extracts dates from parent rows.
+ * @param page - Puppeteer page instance to use for navigation
+ * @param portalUrl - URL to the Stripe billing portal (from getCustomerPortalUrl)
+ * @returns Array of invoices with URLs and dates
+ * @throws Error if navigation fails or invoice links are not found within timeout
+ */
 export async function getInvoiceUrls(page: Page, portalUrl: string): Promise<Invoice[]> {
   debug(`Navigating to invoice portal: ${portalUrl}`);
   console.log('Navigating to invoice portal...');
@@ -55,6 +81,13 @@ export async function getInvoiceUrls(page: Page, portalUrl: string): Promise<Inv
   return invoices;
 }
 
+/**
+ * Filters invoices to only those from a specific month.
+ * Supports multiple date formats: "Jan 15, 2024", "January 15, 2024", "2024-01-15".
+ * @param invoices - Array of invoices to filter
+ * @param targetMonth - Target month in YYYY-MM format (e.g., "2024-01")
+ * @returns Invoices that match the target month and year
+ */
 export function filterInvoicesByMonth(invoices: Invoice[], targetMonth: string): Invoice[] {
   // targetMonth format: YYYY-MM
   const [year, month] = targetMonth.split('-');
@@ -88,6 +121,15 @@ export function filterInvoicesByMonth(invoices: Invoice[], targetMonth: string):
   });
 }
 
+/**
+ * Downloads an invoice PDF from the given URL.
+ * Opens the invoice page, clicks the download button, and waits for the PDF.
+ * Uses CDP (Chrome DevTools Protocol) to configure download behavior.
+ * @param browser - Puppeteer browser instance
+ * @param invoiceUrl - URL to the invoice detail page
+ * @param outputDir - Directory to save the downloaded PDF
+ * @returns Result indicating success/failure with file path or error message
+ */
 export async function downloadInvoice(
   browser: Browser,
   invoiceUrl: string,
@@ -139,6 +181,14 @@ export async function downloadInvoice(
   }
 }
 
+/**
+ * Waits for a new PDF file to appear in the download directory.
+ * Polls the directory for new files and waits for file size to stabilize.
+ * @param downloadDir - Directory to watch for new files
+ * @param timeout - Maximum time to wait in milliseconds
+ * @returns Path to the downloaded file
+ * @throws Error if no new PDF appears within the timeout
+ */
 async function waitForFileDownload(downloadDir: string, timeout: number): Promise<string> {
   const startTime = Date.now();
   const existingFiles = new Set(fs.readdirSync(downloadDir).filter(f => f.endsWith('.pdf')));
@@ -170,6 +220,11 @@ async function waitForFileDownload(downloadDir: string, timeout: number): Promis
   throw new Error('Download timed out');
 }
 
+/**
+ * Pauses execution for a specified duration.
+ * @param ms - Duration to sleep in milliseconds
+ * @returns Promise that resolves after the delay
+ */
 function sleep(ms: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms));
 }

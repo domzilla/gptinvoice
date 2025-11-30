@@ -1,9 +1,24 @@
+/**
+ * @fileoverview CLI argument parsing and help text for gptinvoice.
+ * Handles parsing command-line arguments and provides usage documentation.
+ * @module cli
+ */
+
+/**
+ * Parsed command-line options.
+ */
 export interface CliOptions {
+  /** Directory to save downloaded invoices (default: current working directory) */
   outputDir: string;
+  /** If true, download all available invoices instead of just the latest */
   downloadAll: boolean;
+  /** Target month in YYYY-MM format, or null for no month filter */
   month: string | null;
+  /** If true, display help text and exit */
   showHelp: boolean;
+  /** If true, clear saved access token and exit */
   clearConfig: boolean;
+  /** If true, enable verbose debug logging */
   debug: boolean;
 }
 
@@ -40,6 +55,13 @@ CONFIGURATION:
   4. Copy the returned token (without quotes)
 `;
 
+/**
+ * Parses command-line arguments into a CliOptions object.
+ * Exits the process with an error message for invalid options.
+ * @param args - Array of command-line arguments (typically process.argv.slice(2))
+ * @returns Parsed options with defaults applied
+ * @throws Exits process on invalid month format or unknown options
+ */
 export function parseArgs(args: string[]): CliOptions {
   const options: CliOptions = {
     outputDir: process.cwd(),
@@ -80,15 +102,31 @@ export function parseArgs(args: string[]): CliOptions {
   return options;
 }
 
+/**
+ * Validates that a string is in YYYY-MM format with valid month (01-12).
+ * @param month - The string to validate
+ * @returns True if the format is valid, false otherwise
+ * @example
+ * isValidMonthFormat('2024-01') // true
+ * isValidMonthFormat('2024-13') // false
+ * isValidMonthFormat('24-01')   // false
+ */
 export function isValidMonthFormat(month: string): boolean {
   const regex = /^\d{4}-(0[1-9]|1[0-2])$/;
   return regex.test(month);
 }
 
+/**
+ * Prints the help text to stdout.
+ */
 export function printHelp(): void {
   console.log(HELP_TEXT);
 }
 
+/**
+ * Returns the help text string.
+ * @returns The full help text including usage, options, and examples
+ */
 export function getHelpText(): string {
   return HELP_TEXT;
 }

@@ -1,16 +1,39 @@
+/**
+ * @fileoverview ChatGPT API client for gptinvoice.
+ * Handles authentication verification and fetching the customer billing portal URL.
+ * Uses browser-like headers to avoid being blocked by the API.
+ * @module api
+ */
+
 import { debug, debugError } from './debug';
 
+/**
+ * Response from the customer portal API endpoint.
+ */
 export interface CustomerPortalResponse {
+  /** URL to the Stripe billing portal */
   url: string;
 }
 
+/**
+ * Result of verifying an access token.
+ */
 export interface TokenVerificationResult {
+  /** Whether the token is valid */
   valid: boolean;
+  /** Error message if the token is invalid */
   error?: string;
 }
 
+/** Base URL for the ChatGPT backend API */
 const CHATGPT_API_BASE = 'https://chatgpt.com/backend-api';
 
+/**
+ * Verifies that an access token is valid by making a request to the billing API.
+ * Uses the customer portal endpoint as a lightweight verification method.
+ * @param accessToken - The ChatGPT access token to verify
+ * @returns Object indicating whether the token is valid, with error details if not
+ */
 export async function verifyAccessToken(accessToken: string): Promise<TokenVerificationResult> {
   const url = `${CHATGPT_API_BASE}/payments/customer_portal`;
 
@@ -61,6 +84,13 @@ export async function verifyAccessToken(accessToken: string): Promise<TokenVerif
   }
 }
 
+/**
+ * Fetches the Stripe customer billing portal URL from the ChatGPT API.
+ * The portal URL provides access to invoices and billing management.
+ * @param accessToken - A valid ChatGPT access token
+ * @returns The URL to the Stripe billing portal
+ * @throws Error if the request fails or the response is invalid
+ */
 export async function getCustomerPortalUrl(accessToken: string): Promise<string> {
   const url = `${CHATGPT_API_BASE}/payments/customer_portal`;
 

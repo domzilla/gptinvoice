@@ -1,23 +1,51 @@
+/**
+ * @fileoverview Configuration management for gptinvoice.
+ * Handles reading, writing, and deleting the config file stored at ~/.gptinvoice/config.
+ * The config file stores the ChatGPT access token in JSON format.
+ * Security: Directory created with 0700 permissions, file with 0600 permissions.
+ * @module config
+ */
+
 import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';
 
+/**
+ * Configuration object stored in the config file.
+ */
 export interface Config {
+  /** The ChatGPT access token used for API authentication */
   accessToken: string;
 }
 
+/**
+ * Gets the path to the configuration directory.
+ * @returns The absolute path to ~/.gptinvoice
+ */
 export function getConfigDir(): string {
   return path.join(os.homedir(), '.gptinvoice');
 }
 
+/**
+ * Gets the path to the configuration file.
+ * @returns The absolute path to ~/.gptinvoice/config
+ */
 export function getConfigPath(): string {
   return path.join(getConfigDir(), 'config');
 }
 
+/**
+ * Checks if a configuration file exists.
+ * @returns True if the config file exists, false otherwise
+ */
 export function configExists(): boolean {
   return fs.existsSync(getConfigPath());
 }
 
+/**
+ * Loads and validates the configuration from disk.
+ * @returns The config object if valid, null if missing, invalid JSON, or missing accessToken
+ */
 export function loadConfig(): Config | null {
   if (!configExists()) {
     return null;
@@ -37,6 +65,12 @@ export function loadConfig(): Config | null {
   }
 }
 
+/**
+ * Saves the configuration to disk.
+ * Creates the config directory if it doesn't exist.
+ * Sets secure file permissions (0600 for file, 0700 for directory).
+ * @param config - The configuration to save
+ */
 export function saveConfig(config: Config): void {
   const configDir = getConfigDir();
   if (!fs.existsSync(configDir)) {
@@ -49,6 +83,10 @@ export function saveConfig(config: Config): void {
   });
 }
 
+/**
+ * Deletes the configuration file if it exists.
+ * Does nothing if the config file doesn't exist.
+ */
 export function deleteConfig(): void {
   if (configExists()) {
     fs.unlinkSync(getConfigPath());
