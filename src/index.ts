@@ -2,10 +2,11 @@
 
 import puppeteer from 'puppeteer';
 import { parseArgs, printHelp } from './cli';
-import { loadConfig, saveConfig, configExists, deleteConfig } from './config';
+import { loadConfig, saveConfig, configExists, deleteConfig, getConfigPath } from './config';
 import { verifyAccessToken, getCustomerPortalUrl } from './api';
 import { printTokenInstructions, promptForToken } from './prompt';
 import { getInvoiceUrls, downloadInvoice, filterInvoicesByMonth } from './download';
+import { setDebugEnabled, debug } from './debug';
 
 async function getValidAccessToken(): Promise<string> {
   const config = loadConfig();
@@ -66,6 +67,14 @@ async function main(): Promise<void> {
     deleteConfig();
     console.log('Access token cleared from config.');
     process.exit(0);
+  }
+
+  if (options.debug) {
+    setDebugEnabled(true);
+    debug('Debug mode enabled');
+    debug(`Node version: ${process.version}`);
+    debug(`Platform: ${process.platform}`);
+    debug(`Config path: ${getConfigPath()}`);
   }
 
   // Get a valid access token (prompting if necessary)

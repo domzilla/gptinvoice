@@ -10,6 +10,7 @@ describe('cli', () => {
       expect(options.month).toBeNull();
       expect(options.showHelp).toBe(false);
       expect(options.clearConfig).toBe(false);
+      expect(options.debug).toBe(false);
     });
 
     it('should parse -h flag', () => {
@@ -35,6 +36,11 @@ describe('cli', () => {
     it('should parse --clear flag', () => {
       const options = parseArgs(['--clear']);
       expect(options.clearConfig).toBe(true);
+    });
+
+    it('should parse --debug flag', () => {
+      const options = parseArgs(['--debug']);
+      expect(options.debug).toBe(true);
     });
 
     it('should parse -output option', () => {
@@ -110,6 +116,7 @@ describe('cli', () => {
       expect(helpText).toContain('-output');
       expect(helpText).toContain('--all');
       expect(helpText).toContain('--clear');
+      expect(helpText).toContain('--debug');
       expect(helpText).toContain('-month');
       expect(helpText).toContain('-h');
       expect(helpText).toContain('EXAMPLES');

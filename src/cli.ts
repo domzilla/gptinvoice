@@ -4,6 +4,7 @@ export interface CliOptions {
   month: string | null;
   showHelp: boolean;
   clearConfig: boolean;
+  debug: boolean;
 }
 
 const HELP_TEXT = `
@@ -17,6 +18,7 @@ OPTIONS:
   --all             Download all available invoices
   -month <YYYY-MM>  Download invoice for a specific month (e.g., 2024-01)
   --clear           Clear saved access token from config
+  --debug           Enable debug logging
   -h, -help         Show this help message
 
 EXAMPLES:
@@ -44,7 +46,8 @@ export function parseArgs(args: string[]): CliOptions {
     downloadAll: false,
     month: null,
     showHelp: false,
-    clearConfig: false
+    clearConfig: false,
+    debug: false
   };
 
   for (let i = 0; i < args.length; i++) {
@@ -56,6 +59,8 @@ export function parseArgs(args: string[]): CliOptions {
       options.downloadAll = true;
     } else if (arg === '--clear') {
       options.clearConfig = true;
+    } else if (arg === '--debug') {
+      options.debug = true;
     } else if (arg === '-output' && i + 1 < args.length) {
       options.outputDir = args[++i];
     } else if (arg === '-month' && i + 1 < args.length) {

@@ -1,25 +1,29 @@
 import { verifyAccessToken } from './api';
 
+// Mock the debug module
+jest.mock('./debug', () => ({
+  debug: jest.fn(),
+  debugError: jest.fn()
+}));
+
 describe('api', () => {
   describe('verifyAccessToken', () => {
     const originalFetch = global.fetch;
-    const originalConsoleLog = console.log;
-
-    beforeEach(() => {
-      // Silence console.log during tests
-      console.log = jest.fn();
-    });
 
     afterEach(() => {
       global.fetch = originalFetch;
-      console.log = originalConsoleLog;
+    });
+
+    const mockHeaders = new Map();
+    const mockResponse = (ok: boolean, status: number) => ({
+      ok,
+      status,
+      headers: { entries: () => mockHeaders.entries() },
+      text: jest.fn().mockResolvedValue('')
     });
 
     it('should return valid:true when API returns 200', async () => {
-      global.fetch = jest.fn().mockResolvedValue({
-        ok: true,
-        status: 200
-      });
+      global.fetch = jest.fn().mockResolvedValue(mockResponse(true, 200));
 
       const result = await verifyAccessToken('valid-token');
 
@@ -28,10 +32,7 @@ describe('api', () => {
     });
 
     it('should return valid:false when API returns 401', async () => {
-      global.fetch = jest.fn().mockResolvedValue({
-        ok: false,
-        status: 401
-      });
+      global.fetch = jest.fn().mockResolvedValue(mockResponse(false, 401));
 
       const result = await verifyAccessToken('invalid-token');
 
@@ -40,10 +41,7 @@ describe('api', () => {
     });
 
     it('should return valid:false when API returns 403', async () => {
-      global.fetch = jest.fn().mockResolvedValue({
-        ok: false,
-        status: 403
-      });
+      global.fetch = jest.fn().mockResolvedValue(mockResponse(false, 403));
 
       const result = await verifyAccessToken('forbidden-token');
 
@@ -52,10 +50,7 @@ describe('api', () => {
     });
 
     it('should return valid:false with error on other HTTP errors', async () => {
-      global.fetch = jest.fn().mockResolvedValue({
-        ok: false,
-        status: 500
-      });
+      global.fetch = jest.fn().mockResolvedValue(mockResponse(false, 500));
 
       const result = await verifyAccessToken('some-token');
 
@@ -75,10 +70,7 @@ describe('api', () => {
     });
 
     it('should call API with correct headers', async () => {
-      const mockFetch = jest.fn().mockResolvedValue({
-        ok: true,
-        status: 200
-      });
+      const mockFetch = jest.fn().mockResolvedValue(mockResponse(true, 200));
       global.fetch = mockFetch;
 
       await verifyAccessToken('test-token-123');

@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import type { Browser, Page } from 'puppeteer';
+import { debug, debugError } from './debug';
 
 export interface Invoice {
   url: string;
@@ -14,12 +15,15 @@ export interface DownloadResult {
 }
 
 export async function getInvoiceUrls(page: Page, portalUrl: string): Promise<Invoice[]> {
+  debug(`Navigating to invoice portal: ${portalUrl}`);
   console.log('Navigating to invoice portal...');
   await page.goto(portalUrl, { waitUntil: 'networkidle2' });
 
+  debug('Waiting for invoice link selector: a[data-testid="hip-link"]');
   console.log('Waiting for invoice list to load...');
   await page.waitForSelector('a[data-testid="hip-link"]', { timeout: 30000 });
 
+  debug('Extracting invoice URLs from page');
   const invoices = await page.evaluate(() => {
     const links = document.querySelectorAll('a[data-testid="hip-link"]');
     const results: { url: string; date: string }[] = [];
@@ -47,6 +51,7 @@ export async function getInvoiceUrls(page: Page, portalUrl: string): Promise<Inv
     return results;
   });
 
+  debug(`Found ${invoices.length} invoice(s):`, invoices);
   return invoices;
 }
 
@@ -88,35 +93,45 @@ export async function downloadInvoice(
   invoiceUrl: string,
   outputDir: string
 ): Promise<DownloadResult> {
+  debug(`Starting download from: ${invoiceUrl}`);
+  debug(`Output directory: ${outputDir}`);
+
   const invoicePage = await browser.newPage();
 
   try {
     // Ensure output directory exists
     if (!fs.existsSync(outputDir)) {
+      debug(`Creating output directory: ${outputDir}`);
       fs.mkdirSync(outputDir, { recursive: true });
     }
 
     // Set up download behavior using CDP
+    debug('Setting up CDP download behavior');
     const cdp = await invoicePage.createCDPSession();
     await cdp.send('Page.setDownloadBehavior', {
       behavior: 'allow',
       downloadPath: path.resolve(outputDir)
     });
 
+    debug(`Navigating to invoice URL: ${invoiceUrl}`);
     console.log('Opening invoice page...');
     await invoicePage.goto(invoiceUrl, { waitUntil: 'networkidle2' });
 
+    debug('Waiting for download button: button.Button--primary');
     console.log('Looking for download button...');
     await invoicePage.waitForSelector('button.Button--primary', { visible: true, timeout: 30000 });
 
+    debug('Clicking download button');
     // Click the download button
     await invoicePage.click('button.Button--primary');
 
     console.log('Waiting for download to complete...');
     const downloadedFile = await waitForFileDownload(outputDir, 30000);
 
+    debug(`Download complete: ${downloadedFile}`);
     return { success: true, filePath: downloadedFile };
   } catch (error) {
+    debugError('Download failed', error);
     const message = error instanceof Error ? error.message : 'Unknown error';
     return { success: false, error: message };
   } finally {
