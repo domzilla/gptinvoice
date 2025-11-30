@@ -52,7 +52,9 @@ The token is stored securely in `~/.gptinvoice/config`.
 | `-output <dir>` | Download invoices to specified directory (default: current directory) |
 | `--all` | Download all available invoices |
 | `-month <YYYY-MM>` | Download invoice for a specific month (e.g., 2024-01) |
-| `-h`, `-help` | Show help message |
+| `--clear` | Clear saved access token from config |
+| `--debug` | Enable verbose debug logging |
+| `-h`, `-help`, `--help` | Show help message |
 
 ## Examples
 
@@ -103,4 +105,4 @@ npm test -- --watch
 
 ## License
 
-MIT
+MIT License - see [LICENSE](LICENSE) for details.
