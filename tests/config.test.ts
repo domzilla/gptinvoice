@@ -4,7 +4,7 @@ import * as os from 'os';
 
 describe('config', () => {
   let tempDir: string;
-  let configModule: typeof import('./config');
+  let configModule: typeof import('../src/config');
 
   beforeEach(async () => {
     // Create a temporary directory for testing
@@ -20,7 +20,7 @@ describe('config', () => {
     }));
 
     // Dynamically import the config module with the mocked os
-    configModule = await import('./config');
+    configModule = await import('../src/config');
   });
 
   afterEach(() => {

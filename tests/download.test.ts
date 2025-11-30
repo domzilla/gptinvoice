@@ -1,4 +1,4 @@
-import { filterInvoicesByMonth, Invoice } from './download';
+import { filterInvoicesByMonth, Invoice } from '../src/download';
 
 describe('download', () => {
   describe('filterInvoicesByMonth', () => {

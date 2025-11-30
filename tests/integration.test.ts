@@ -8,9 +8,9 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';
 import puppeteer, { Browser } from 'puppeteer';
-import { loadConfig } from './config';
-import { verifyAccessToken, getCustomerPortalUrl } from './api';
-import { getInvoiceUrls, downloadInvoice } from './download';
+import { loadConfig } from '../src/config';
+import { verifyAccessToken, getCustomerPortalUrl } from '../src/api';
+import { getInvoiceUrls, downloadInvoice } from '../src/download';
 
 // Check if we have a valid access token
 const config = loadConfig();

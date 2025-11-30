@@ -1,4 +1,4 @@
-import { parseArgs, isValidMonthFormat, getHelpText } from './cli';
+import { parseArgs, isValidMonthFormat, getHelpText } from '../src/cli';
 
 describe('cli', () => {
   describe('parseArgs', () => {

@@ -1,7 +1,7 @@
-import { verifyAccessToken } from './api';
+import { verifyAccessToken } from '../src/api';
 
 // Mock the debug module
-jest.mock('./debug', () => ({
+jest.mock('../src/debug', () => ({
   debug: jest.fn(),
   debugError: jest.fn()
 }));
