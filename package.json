@@ -1,0 +1,39 @@
+{
+  "name": "gptinvoice",
+  "version": "1.0.0",
+  "description": "CLI tool to download ChatGPT invoices",
+  "main": "dist/index.js",
+  "bin": {
+    "gptinvoice": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node src/index.ts",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "lint": "eslint src/**/*.ts"
+  },
+  "keywords": [
+    "chatgpt",
+    "invoice",
+    "openai",
+    "cli"
+  ],
+  "author": "Dominic Rodemer",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.11.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "puppeteer": "^24.2.0"
+  }
+}
