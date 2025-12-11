@@ -1,7 +1,11 @@
 /**
- * @fileoverview CLI argument parsing and help text for gptinvoice.
- * Handles parsing command-line arguments and provides usage documentation.
+ * @file cli.ts
  * @module cli
+ * @author Dominic Rodemer
+ * @created 2025-11-30
+ * @license MIT
+ *
+ * @fileoverview CLI argument parsing and help text for gptinvoice.
  */
 
 /**

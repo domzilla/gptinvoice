@@ -1,3 +1,13 @@
+/**
+ * @file cli.test.ts
+ * @module tests/cli
+ * @author Dominic Rodemer
+ * @created 2025-11-30
+ * @license MIT
+ *
+ * @fileoverview Unit tests for CLI argument parsing.
+ */
+
 import { parseArgs, isValidMonthFormat, getHelpText } from '../src/cli';
 
 describe('cli', () => {

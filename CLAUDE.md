@@ -168,3 +168,26 @@ npm run test:all
 2. Check token length and format
 3. Verify API responses and HTTP status codes
 4. Check browser navigation and selector matching
+
+## File Header Format
+
+Every new TypeScript file must include a JSDoc header at the top of the file in the following format:
+
+```typescript
+/**
+ * @file filename.ts
+ * @module modulename
+ * @author Dominic Rodemer
+ * @created YYYY-MM-DD
+ * @license MIT
+ *
+ * @fileoverview Short description of file purpose.
+ */
+```
+
+- `@file`: The filename including extension
+- `@module`: The module name (e.g., `api`, `cli`, or `tests/api` for test files)
+- `@author`: Always `Dominic Rodemer`
+- `@created`: The file creation date in ISO format (YYYY-MM-DD)
+- `@license`: Always `MIT`
+- `@fileoverview`: A brief description of what the file does (1-2 sentences)

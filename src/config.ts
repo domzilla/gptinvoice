@@ -1,9 +1,12 @@
 /**
+ * @file config.ts
+ * @module config
+ * @author Dominic Rodemer
+ * @created 2025-11-30
+ * @license MIT
+ *
  * @fileoverview Configuration management for gptinvoice.
  * Handles reading, writing, and deleting the config file stored at ~/.gptinvoice/config.
- * The config file stores the ChatGPT access token in JSON format.
- * Security: Directory created with 0700 permissions, file with 0600 permissions.
- * @module config
  */
 
 import * as fs from 'fs';

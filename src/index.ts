@@ -1,9 +1,14 @@
 #!/usr/bin/env node
 
 /**
+ * @file index.ts
+ * @module index
+ * @author Dominic Rodemer
+ * @created 2025-11-30
+ * @license MIT
+ *
  * @fileoverview Main entry point for gptinvoice CLI.
  * Orchestrates the invoice download workflow: authentication, portal access, and PDF downloads.
- * @module index
  */
 
 import puppeteer from 'puppeteer';

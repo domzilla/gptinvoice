@@ -1,8 +1,12 @@
 /**
+ * @file api.ts
+ * @module api
+ * @author Dominic Rodemer
+ * @created 2025-11-30
+ * @license MIT
+ *
  * @fileoverview ChatGPT API client for gptinvoice.
  * Handles authentication verification and fetching the customer billing portal URL.
- * Uses browser-like headers to avoid being blocked by the API.
- * @module api
  */
 
 import { debug, debugError } from './debug';

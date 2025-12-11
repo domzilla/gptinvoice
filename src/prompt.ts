@@ -1,7 +1,12 @@
 /**
+ * @file prompt.ts
+ * @module prompt
+ * @author Dominic Rodemer
+ * @created 2025-11-30
+ * @license MIT
+ *
  * @fileoverview Interactive user prompts for gptinvoice.
  * Provides functions for displaying instructions and collecting user input.
- * @module prompt
  */
 
 import * as readline from 'readline';

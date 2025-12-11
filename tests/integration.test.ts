@@ -1,7 +1,12 @@
 /**
- * Integration tests that test actual API calls and invoice downloads.
- * These tests require a valid access token stored in ~/.gptinvoice/config
- * Tests are skipped if no valid token is available.
+ * @file integration.test.ts
+ * @module tests/integration
+ * @author Dominic Rodemer
+ * @created 2025-11-30
+ * @license MIT
+ *
+ * @fileoverview Integration tests for API calls and invoice downloads.
+ * These tests require a valid access token stored in ~/.gptinvoice/config.
  */
 
 import * as fs from 'fs';

@@ -1,3 +1,13 @@
+/**
+ * @file api.test.ts
+ * @module tests/api
+ * @author Dominic Rodemer
+ * @created 2025-11-30
+ * @license MIT
+ *
+ * @fileoverview Unit tests for the ChatGPT API client.
+ */
+
 import { verifyAccessToken } from '../src/api';
 
 // Mock the debug module

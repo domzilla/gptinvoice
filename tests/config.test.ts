@@ -1,3 +1,13 @@
+/**
+ * @file config.test.ts
+ * @module tests/config
+ * @author Dominic Rodemer
+ * @created 2025-11-30
+ * @license MIT
+ *
+ * @fileoverview Unit tests for configuration management.
+ */
+
 import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';

@@ -1,8 +1,12 @@
 /**
+ * @file download.ts
+ * @module download
+ * @author Dominic Rodemer
+ * @created 2025-11-30
+ * @license MIT
+ *
  * @fileoverview Invoice downloading functionality using Puppeteer.
  * Handles navigating the Stripe billing portal and downloading invoice PDFs.
- * Uses Chrome DevTools Protocol (CDP) for reliable file downloads.
- * @module download
  */
 
 import * as fs from 'fs';

@@ -1,3 +1,13 @@
+/**
+ * @file download.test.ts
+ * @module tests/download
+ * @author Dominic Rodemer
+ * @created 2025-11-30
+ * @license MIT
+ *
+ * @fileoverview Unit tests for invoice download functionality.
+ */
+
 import { filterInvoicesByMonth, Invoice } from '../src/download';
 
 describe('download', () => {

@@ -1,8 +1,12 @@
 /**
+ * @file debug.ts
+ * @module debug
+ * @author Dominic Rodemer
+ * @created 2025-11-30
+ * @license MIT
+ *
  * @fileoverview Debug logging utilities for gptinvoice.
  * Provides conditional logging that can be enabled via the --debug CLI flag.
- * All debug output is prefixed with [DEBUG] for easy identification.
- * @module debug
  */
 
 /** Flag indicating whether debug logging is enabled */
