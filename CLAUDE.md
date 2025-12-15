@@ -1,10 +1,12 @@
-# CLAUDE.md - gptinvoice
-
-This file provides guidance for Claude Code when working on this project.
-
-## Project Overview
+# gptinvoice
 
 `gptinvoice` is a Node.js CLI application written in TypeScript that downloads monthly invoices from ChatGPT/OpenAI. It automates the process of accessing the billing portal and downloading invoice PDFs.
+
+## Code Style
+
+**IMPORTANT:** All code in this project MUST strictly follow the [Node.js Style Guide](~/Agents/Style Guides/node-js-style-guide.md). This style guide is mandatory and must be adhered to when writing, modifying, or reviewing any code in this codebase.
+
+Before submitting any code changes, verify they conform to the style guide.
 
 ## Project Structure
 
@@ -168,26 +170,3 @@ npm run test:all
 2. Check token length and format
 3. Verify API responses and HTTP status codes
 4. Check browser navigation and selector matching
-
-## File Header Format
-
-Every new TypeScript file must include a JSDoc header at the top of the file in the following format:
-
-```typescript
-/**
- * @file filename.ts
- * @module modulename
- * @author Dominic Rodemer
- * @created YYYY-MM-DD
- * @license MIT
- *
- * @fileoverview Short description of file purpose.
- */
-```
-
-- `@file`: The filename including extension
-- `@module`: The module name (e.g., `api`, `cli`, or `tests/api` for test files)
-- `@author`: Always `Dominic Rodemer`
-- `@created`: The file creation date in ISO format (YYYY-MM-DD)
-- `@license`: Always `MIT`
-- `@fileoverview`: A brief description of what the file does (1-2 sentences)
