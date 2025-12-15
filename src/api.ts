@@ -15,18 +15,18 @@ import { debug, debugError } from './debug';
  * Response from the customer portal API endpoint.
  */
 export interface CustomerPortalResponse {
-  /** URL to the Stripe billing portal */
-  url: string;
+    /** URL to the Stripe billing portal */
+    url: string;
 }
 
 /**
  * Result of verifying an access token.
  */
 export interface TokenVerificationResult {
-  /** Whether the token is valid */
-  valid: boolean;
-  /** Error message if the token is invalid */
-  error?: string;
+    /** Whether the token is valid */
+    valid: boolean;
+    /** Error message if the token is invalid */
+    error?: string;
 }
 
 /** Base URL for the ChatGPT backend API */
@@ -39,53 +39,58 @@ const CHATGPT_API_BASE = 'https://chatgpt.com/backend-api';
  * @returns Object indicating whether the token is valid, with error details if not
  */
 export async function verifyAccessToken(accessToken: string): Promise<TokenVerificationResult> {
-  const url = `${CHATGPT_API_BASE}/payments/customer_portal`;
+    const url = `${CHATGPT_API_BASE}/payments/customer_portal`;
 
-  debug(`Verifying access token (length: ${accessToken.length})`);
-  debug(`Request URL: ${url}`);
+    debug(`Verifying access token (length: ${accessToken.length})`);
+    debug(`Request URL: ${url}`);
 
-  try {
-    const headers = {
-      'Authorization': `Bearer ${accessToken}`,
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Referer': 'https://chatgpt.com/',
-      'Origin': 'https://chatgpt.com',
-      'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
-    };
+    try {
+        const headers = {
+            Authorization: `Bearer ${accessToken}`,
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Referer: 'https://chatgpt.com/',
+            Origin: 'https://chatgpt.com',
+            'User-Agent':
+                'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        };
 
-    debug('Request headers:', Object.keys(headers));
+        debug('Request headers:', Object.keys(headers));
 
-    const response = await fetch(url, {
-      method: 'GET',
-      headers
-    });
+        const response = await fetch(url, {
+            method: 'GET',
+            headers,
+        });
 
-    debug(`Response status: ${response.status}`);
+        debug(`Response status: ${response.status}`);
 
-    if (response.ok) {
-      debug('Token verification successful');
-      return { valid: true };
-    } else if (response.status === 401 || response.status === 403) {
-      let body = '';
-      try {
-        body = await response.text();
-        debug('Response body:', body);
-      } catch {}
-      return { valid: false, error: 'Access token is invalid or expired' };
-    } else {
-      let body = '';
-      try {
-        body = await response.text();
-        debug('Response body:', body);
-      } catch {}
-      return { valid: false, error: `Unexpected response: HTTP ${response.status}` };
+        if (response.ok) {
+            debug('Token verification successful');
+            return { valid: true };
+        } else if (response.status === 401 || response.status === 403) {
+            let body = '';
+            try {
+                body = await response.text();
+                debug('Response body:', body);
+            } catch {
+                // Ignore - body extraction is best effort
+            }
+            return { valid: false, error: 'Access token is invalid or expired' };
+        } else {
+            let body = '';
+            try {
+                body = await response.text();
+                debug('Response body:', body);
+            } catch {
+                // Ignore - body extraction is best effort
+            }
+            return { valid: false, error: `Unexpected response: HTTP ${response.status}` };
+        }
+    } catch (error) {
+        debugError('Token verification failed', error);
+        const message = error instanceof Error ? error.message : 'Unknown error';
+        return { valid: false, error: `Network error: ${message}` };
     }
-  } catch (error) {
-    debugError('Token verification failed', error);
-    const message = error instanceof Error ? error.message : 'Unknown error';
-    return { valid: false, error: `Network error: ${message}` };
-  }
 }
 
 /**
@@ -96,41 +101,44 @@ export async function verifyAccessToken(accessToken: string): Promise<TokenVerif
  * @throws Error if the request fails or the response is invalid
  */
 export async function getCustomerPortalUrl(accessToken: string): Promise<string> {
-  const url = `${CHATGPT_API_BASE}/payments/customer_portal`;
+    const url = `${CHATGPT_API_BASE}/payments/customer_portal`;
 
-  debug(`Fetching customer portal URL from: ${url}`);
+    debug(`Fetching customer portal URL from: ${url}`);
 
-  const headers = {
-    'Authorization': `Bearer ${accessToken}`,
-    'Accept': 'application/json',
-    'Content-Type': 'application/json',
-    'Referer': 'https://chatgpt.com/',
-    'Origin': 'https://chatgpt.com',
-    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
-  };
+    const headers = {
+        Authorization: `Bearer ${accessToken}`,
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Referer: 'https://chatgpt.com/',
+        Origin: 'https://chatgpt.com',
+        'User-Agent':
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+    };
 
-  const response = await fetch(url, {
-    method: 'GET',
-    headers
-  });
+    const response = await fetch(url, {
+        method: 'GET',
+        headers,
+    });
 
-  debug(`Response status: ${response.status}`);
+    debug(`Response status: ${response.status}`);
 
-  if (!response.ok) {
-    let body = '';
-    try {
-      body = await response.text();
-      debug('Response body:', body);
-    } catch {}
-    throw new Error(`Failed to fetch customer portal: HTTP ${response.status}`);
-  }
+    if (!response.ok) {
+        let body = '';
+        try {
+            body = await response.text();
+            debug('Response body:', body);
+        } catch {
+            // Ignore - body extraction is best effort
+        }
+        throw new Error(`Failed to fetch customer portal: HTTP ${response.status}`);
+    }
 
-  const data = await response.json() as CustomerPortalResponse;
-  debug('Portal URL response:', data);
+    const data = (await response.json()) as CustomerPortalResponse;
+    debug('Portal URL response:', data);
 
-  if (!data.url) {
-    throw new Error('Customer portal URL not found in response');
-  }
+    if (!data.url) {
+        throw new Error('Customer portal URL not found in response');
+    }
 
-  return data.url;
+    return data.url;
 }

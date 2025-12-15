@@ -30,7 +30,7 @@ To get your ChatGPT access token:
  * Displays browser-specific guidance for accessing the developer console.
  */
 export function printTokenInstructions(): void {
-  console.log(TOKEN_INSTRUCTIONS);
+    console.log(TOKEN_INSTRUCTIONS);
 }
 
 /**
@@ -39,23 +39,25 @@ export function printTokenInstructions(): void {
  * @returns The entered access token (trimmed, quotes removed if present)
  */
 export async function promptForToken(): Promise<string> {
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-  });
-
-  return new Promise((resolve) => {
-    rl.question('Enter your ChatGPT access token: ', (answer) => {
-      rl.close();
-      // Remove surrounding quotes if present (makes copy-paste easier)
-      let token = answer.trim();
-      if ((token.startsWith('"') && token.endsWith('"')) ||
-          (token.startsWith("'") && token.endsWith("'"))) {
-        token = token.slice(1, -1);
-      }
-      resolve(token);
+    const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout,
     });
-  });
+
+    return new Promise(resolve => {
+        rl.question('Enter your ChatGPT access token: ', answer => {
+            rl.close();
+            // Remove surrounding quotes if present (makes copy-paste easier)
+            let token = answer.trim();
+            if (
+                (token.startsWith('"') && token.endsWith('"')) ||
+                (token.startsWith("'") && token.endsWith("'"))
+            ) {
+                token = token.slice(1, -1);
+            }
+            resolve(token);
+        });
+    });
 }
 
 /**
@@ -65,16 +67,16 @@ export async function promptForToken(): Promise<string> {
  * @returns True if the user answered yes, false otherwise
  */
 export async function promptYesNo(question: string): Promise<boolean> {
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-  });
-
-  return new Promise((resolve) => {
-    rl.question(`${question} (y/n): `, (answer) => {
-      rl.close();
-      const normalized = answer.trim().toLowerCase();
-      resolve(normalized === 'y' || normalized === 'yes');
+    const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout,
     });
-  });
+
+    return new Promise(resolve => {
+        rl.question(`${question} (y/n): `, answer => {
+            rl.close();
+            const normalized = answer.trim().toLowerCase();
+            resolve(normalized === 'y' || normalized === 'yes');
+        });
+    });
 }

@@ -17,8 +17,8 @@ import * as os from 'os';
  * Configuration object stored in the config file.
  */
 export interface Config {
-  /** The ChatGPT access token used for API authentication */
-  accessToken: string;
+    /** The ChatGPT access token used for API authentication */
+    accessToken: string;
 }
 
 /**
@@ -26,7 +26,7 @@ export interface Config {
  * @returns The absolute path to ~/.gptinvoice
  */
 export function getConfigDir(): string {
-  return path.join(os.homedir(), '.gptinvoice');
+    return path.join(os.homedir(), '.gptinvoice');
 }
 
 /**
@@ -34,7 +34,7 @@ export function getConfigDir(): string {
  * @returns The absolute path to ~/.gptinvoice/config
  */
 export function getConfigPath(): string {
-  return path.join(getConfigDir(), 'config');
+    return path.join(getConfigDir(), 'config');
 }
 
 /**
@@ -42,7 +42,7 @@ export function getConfigPath(): string {
  * @returns True if the config file exists, false otherwise
  */
 export function configExists(): boolean {
-  return fs.existsSync(getConfigPath());
+    return fs.existsSync(getConfigPath());
 }
 
 /**
@@ -50,22 +50,22 @@ export function configExists(): boolean {
  * @returns The config object if valid, null if missing, invalid JSON, or missing accessToken
  */
 export function loadConfig(): Config | null {
-  if (!configExists()) {
-    return null;
-  }
-
-  try {
-    const content = fs.readFileSync(getConfigPath(), 'utf-8');
-    const config = JSON.parse(content) as Config;
-
-    if (!config.accessToken || typeof config.accessToken !== 'string') {
-      return null;
+    if (!configExists()) {
+        return null;
     }
 
-    return config;
-  } catch {
-    return null;
-  }
+    try {
+        const content = fs.readFileSync(getConfigPath(), 'utf-8');
+        const config = JSON.parse(content) as Config;
+
+        if (!config.accessToken || typeof config.accessToken !== 'string') {
+            return null;
+        }
+
+        return config;
+    } catch {
+        return null;
+    }
 }
 
 /**
@@ -75,15 +75,15 @@ export function loadConfig(): Config | null {
  * @param config - The configuration to save
  */
 export function saveConfig(config: Config): void {
-  const configDir = getConfigDir();
-  if (!fs.existsSync(configDir)) {
-    fs.mkdirSync(configDir, { recursive: true, mode: 0o700 });
-  }
+    const configDir = getConfigDir();
+    if (!fs.existsSync(configDir)) {
+        fs.mkdirSync(configDir, { recursive: true, mode: 0o700 });
+    }
 
-  fs.writeFileSync(getConfigPath(), JSON.stringify(config, null, 2), {
-    encoding: 'utf-8',
-    mode: 0o600
-  });
+    fs.writeFileSync(getConfigPath(), JSON.stringify(config, null, 2), {
+        encoding: 'utf-8',
+        mode: 0o600,
+    });
 }
 
 /**
@@ -91,7 +91,7 @@ export function saveConfig(config: Config): void {
  * Does nothing if the config file doesn't exist.
  */
 export function deleteConfig(): void {
-  if (configExists()) {
-    fs.unlinkSync(getConfigPath());
-  }
+    if (configExists()) {
+        fs.unlinkSync(getConfigPath());
+    }
 }

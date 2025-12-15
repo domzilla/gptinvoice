@@ -17,7 +17,7 @@ let debugEnabled = false;
  * @param enabled - Whether to enable debug logging
  */
 export function setDebugEnabled(enabled: boolean): void {
-  debugEnabled = enabled;
+    debugEnabled = enabled;
 }
 
 /**
@@ -25,7 +25,7 @@ export function setDebugEnabled(enabled: boolean): void {
  * @returns True if debug logging is enabled
  */
 export function isDebugEnabled(): boolean {
-  return debugEnabled;
+    return debugEnabled;
 }
 
 /**
@@ -35,9 +35,9 @@ export function isDebugEnabled(): boolean {
  * @param args - Additional arguments to log (will be passed to console.log)
  */
 export function debug(message: string, ...args: unknown[]): void {
-  if (debugEnabled) {
-    console.log(`[DEBUG] ${message}`, ...args);
-  }
+    if (debugEnabled) {
+        console.log(`[DEBUG] ${message}`, ...args);
+    }
 }
 
 /**
@@ -47,15 +47,15 @@ export function debug(message: string, ...args: unknown[]): void {
  * @param error - The error that occurred (Error object or any value)
  */
 export function debugError(message: string, error: unknown): void {
-  if (debugEnabled) {
-    console.error(`[DEBUG] ${message}`);
-    if (error instanceof Error) {
-      console.error(`[DEBUG] Error: ${error.message}`);
-      if (error.stack) {
-        console.error(`[DEBUG] Stack: ${error.stack}`);
-      }
-    } else {
-      console.error(`[DEBUG] Error:`, error);
+    if (debugEnabled) {
+        console.error(`[DEBUG] ${message}`);
+        if (error instanceof Error) {
+            console.error(`[DEBUG] Error: ${error.message}`);
+            if (error.stack) {
+                console.error(`[DEBUG] Stack: ${error.stack}`);
+            }
+        } else {
+            console.error(`[DEBUG] Error:`, error);
+        }
     }
-  }
 }

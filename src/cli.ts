@@ -12,18 +12,18 @@
  * Parsed command-line options.
  */
 export interface CliOptions {
-  /** Directory to save downloaded invoices (default: current working directory) */
-  outputDir: string;
-  /** If true, download all available invoices instead of just the latest */
-  downloadAll: boolean;
-  /** Target month in YYYY-MM format, or null for no month filter */
-  month: string | null;
-  /** If true, display help text and exit */
-  showHelp: boolean;
-  /** If true, clear saved access token and exit */
-  clearConfig: boolean;
-  /** If true, enable verbose debug logging */
-  debug: boolean;
+    /** Directory to save downloaded invoices (default: current working directory) */
+    outputDir: string;
+    /** If true, download all available invoices instead of just the latest */
+    downloadAll: boolean;
+    /** Target month in YYYY-MM format, or null for no month filter */
+    month: string | null;
+    /** If true, display help text and exit */
+    showHelp: boolean;
+    /** If true, clear saved access token and exit */
+    clearConfig: boolean;
+    /** If true, enable verbose debug logging */
+    debug: boolean;
 }
 
 const HELP_TEXT = `
@@ -67,43 +67,45 @@ CONFIGURATION:
  * @throws Exits process on invalid month format or unknown options
  */
 export function parseArgs(args: string[]): CliOptions {
-  const options: CliOptions = {
-    outputDir: process.cwd(),
-    downloadAll: false,
-    month: null,
-    showHelp: false,
-    clearConfig: false,
-    debug: false
-  };
+    const options: CliOptions = {
+        outputDir: process.cwd(),
+        downloadAll: false,
+        month: null,
+        showHelp: false,
+        clearConfig: false,
+        debug: false,
+    };
 
-  for (let i = 0; i < args.length; i++) {
-    const arg = args[i];
+    for (let i = 0; i < args.length; i++) {
+        const arg = args[i];
 
-    if (arg === '-h' || arg === '-help' || arg === '--help') {
-      options.showHelp = true;
-    } else if (arg === '--all') {
-      options.downloadAll = true;
-    } else if (arg === '--clear') {
-      options.clearConfig = true;
-    } else if (arg === '--debug') {
-      options.debug = true;
-    } else if (arg === '-output' && i + 1 < args.length) {
-      options.outputDir = args[++i];
-    } else if (arg === '-month' && i + 1 < args.length) {
-      const monthArg = args[++i];
-      if (!isValidMonthFormat(monthArg)) {
-        console.error(`Error: Invalid month format "${monthArg}". Expected format: YYYY-MM (e.g., 2024-01)`);
-        process.exit(1);
-      }
-      options.month = monthArg;
-    } else if (arg.startsWith('-')) {
-      console.error(`Error: Unknown option "${arg}"`);
-      console.error('Use -h or -help for usage information');
-      process.exit(1);
+        if (arg === '-h' || arg === '-help' || arg === '--help') {
+            options.showHelp = true;
+        } else if (arg === '--all') {
+            options.downloadAll = true;
+        } else if (arg === '--clear') {
+            options.clearConfig = true;
+        } else if (arg === '--debug') {
+            options.debug = true;
+        } else if (arg === '-output' && i + 1 < args.length) {
+            options.outputDir = args[++i];
+        } else if (arg === '-month' && i + 1 < args.length) {
+            const monthArg = args[++i];
+            if (!isValidMonthFormat(monthArg)) {
+                console.error(
+                    `Error: Invalid month format "${monthArg}". Expected format: YYYY-MM (e.g., 2024-01)`
+                );
+                process.exit(1);
+            }
+            options.month = monthArg;
+        } else if (arg.startsWith('-')) {
+            console.error(`Error: Unknown option "${arg}"`);
+            console.error('Use -h or -help for usage information');
+            process.exit(1);
+        }
     }
-  }
 
-  return options;
+    return options;
 }
 
 /**
@@ -116,15 +118,15 @@ export function parseArgs(args: string[]): CliOptions {
  * isValidMonthFormat('24-01')   // false
  */
 export function isValidMonthFormat(month: string): boolean {
-  const regex = /^\d{4}-(0[1-9]|1[0-2])$/;
-  return regex.test(month);
+    const regex = /^\d{4}-(0[1-9]|1[0-2])$/;
+    return regex.test(month);
 }
 
 /**
  * Prints the help text to stdout.
  */
 export function printHelp(): void {
-  console.log(HELP_TEXT);
+    console.log(HELP_TEXT);
 }
 
 /**
@@ -132,5 +134,5 @@ export function printHelp(): void {
  * @returns The full help text including usage, options, and examples
  */
 export function getHelpText(): string {
-  return HELP_TEXT;
+    return HELP_TEXT;
 }
