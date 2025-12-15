@@ -12,7 +12,7 @@
  */
 
 import puppeteer from 'puppeteer';
-import { parseArgs, printHelp } from './cli';
+import { parseArgs, printHelp, printVersion } from './cli';
 import { loadConfig, saveConfig, configExists, deleteConfig, getConfigPath } from './config';
 import { verifyAccessToken, getCustomerPortalUrl } from './api';
 import { printTokenInstructions, promptForToken } from './prompt';
@@ -82,6 +82,11 @@ async function main(): Promise<void> {
 
     if (options.showHelp) {
         printHelp();
+        process.exit(0);
+    }
+
+    if (options.showVersion) {
+        printVersion();
         process.exit(0);
     }
 

@@ -8,7 +8,7 @@
  * @fileoverview Unit tests for CLI argument parsing.
  */
 
-import { parseArgs, isValidMonthFormat, getHelpText } from '../src/cli';
+import { parseArgs, isValidMonthFormat, getHelpText, getVersion } from '../src/cli';
 
 describe('cli', () => {
     describe('parseArgs', () => {
@@ -19,6 +19,7 @@ describe('cli', () => {
             expect(options.downloadAll).toBe(false);
             expect(options.month).toBeNull();
             expect(options.showHelp).toBe(false);
+            expect(options.showVersion).toBe(false);
             expect(options.clearConfig).toBe(false);
             expect(options.debug).toBe(false);
         });
@@ -36,6 +37,16 @@ describe('cli', () => {
         it('should parse --help flag', () => {
             const options = parseArgs(['--help']);
             expect(options.showHelp).toBe(true);
+        });
+
+        it('should parse -V flag', () => {
+            const options = parseArgs(['-V']);
+            expect(options.showVersion).toBe(true);
+        });
+
+        it('should parse --version flag', () => {
+            const options = parseArgs(['--version']);
+            expect(options.showVersion).toBe(true);
         });
 
         it('should parse --all flag', () => {
@@ -129,7 +140,18 @@ describe('cli', () => {
             expect(helpText).toContain('--debug');
             expect(helpText).toContain('-month');
             expect(helpText).toContain('-h');
+            expect(helpText).toContain('-V');
+            expect(helpText).toContain('--version');
             expect(helpText).toContain('EXAMPLES');
+        });
+    });
+
+    describe('getVersion', () => {
+        it('should return a version string', () => {
+            const version = getVersion();
+
+            expect(typeof version).toBe('string');
+            expect(version).toMatch(/^\d+\.\d+\.\d+$/);
         });
     });
 });

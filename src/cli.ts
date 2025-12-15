@@ -20,6 +20,8 @@ export interface CliOptions {
     month: string | null;
     /** If true, display help text and exit */
     showHelp: boolean;
+    /** If true, display version and exit */
+    showVersion: boolean;
     /** If true, clear saved access token and exit */
     clearConfig: boolean;
     /** If true, enable verbose debug logging */
@@ -39,6 +41,7 @@ OPTIONS:
   --clear           Clear saved access token from config
   --debug           Enable debug logging
   -h, -help         Show this help message
+  -V, --version     Show version number
 
 EXAMPLES:
   gptinvoice                       Download the latest invoice to current directory
@@ -72,6 +75,7 @@ export function parseArgs(args: string[]): CliOptions {
         downloadAll: false,
         month: null,
         showHelp: false,
+        showVersion: false,
         clearConfig: false,
         debug: false,
     };
@@ -81,6 +85,8 @@ export function parseArgs(args: string[]): CliOptions {
 
         if (arg === '-h' || arg === '-help' || arg === '--help') {
             options.showHelp = true;
+        } else if (arg === '-V' || arg === '--version') {
+            options.showVersion = true;
         } else if (arg === '--all') {
             options.downloadAll = true;
         } else if (arg === '--clear') {
@@ -135,4 +141,21 @@ export function printHelp(): void {
  */
 export function getHelpText(): string {
     return HELP_TEXT;
+}
+
+/**
+ * Gets the version from package.json.
+ * @returns The version string from package.json
+ */
+export function getVersion(): string {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const pkg = require('../package.json');
+    return pkg.version;
+}
+
+/**
+ * Prints the version to stdout.
+ */
+export function printVersion(): void {
+    console.log(`gptinvoice v${getVersion()}`);
 }
