@@ -41,13 +41,9 @@ gptinvoice -h
 On first run, the tool will prompt you for your ChatGPT access token. To get your token:
 
 1. Log into [ChatGPT](https://chatgpt.com) in your browser
-2. Open the browser developer console (F12 or Cmd+Option+I)
-3. Run this command:
-   ```javascript
-   window.__reactRouterContext?.state?.loaderData?.root?.clientBootstrap?.session?.accessToken
-   ```
-4. Copy the returned string (without quotes)
-5. Paste it when prompted
+2. Open this URL in the same browser: https://chatgpt.com/api/auth/session
+3. Copy the `accessToken` value from the JSON response
+4. Paste it when prompted (you can paste the entire JSON or just the token value)
 
 The token is stored securely in `~/.gptinvoice/config`.
 

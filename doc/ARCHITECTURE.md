@@ -98,7 +98,7 @@ Interactive user prompts using Node.js readline.
 
 **Exports:**
 - `printTokenInstructions()` - Displays how to obtain access token
-- `promptForToken()` - Prompts for token input (strips surrounding quotes)
+- `promptForToken()` - Prompts for token input (accepts raw token, quoted token, or full JSON session response)
 - `promptYesNo(question)` - Yes/no confirmation prompt
 
 ### Download Layer (`src/download.ts`)
@@ -230,7 +230,7 @@ Tests real API calls and invoice downloads:
 2. **Config Directory**: Created with `0700` permissions (owner access only)
 3. **No Cookie Support**: Unlike reference implementations, we don't support cookie-based auth to reduce complexity and security surface
 4. **Headless Browser**: Puppeteer runs in headless mode to avoid exposing the browser UI
-5. **Quote Stripping**: Token input automatically strips surrounding quotes to prevent accidental inclusion
+5. **Token Input Handling**: Token input automatically strips surrounding quotes and parses JSON session responses to extract the access token
 
 ## External Dependencies
 
