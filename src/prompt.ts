@@ -16,13 +16,9 @@ const TOKEN_INSTRUCTIONS = `
 To get your ChatGPT access token:
 
 1. Log into ChatGPT in your browser (https://chatgpt.com)
-2. Open the browser developer console:
-   - Chrome/Edge: Press F12 or Ctrl+Shift+J (Cmd+Option+J on Mac)
-   - Firefox: Press F12 or Ctrl+Shift+K (Cmd+Option+K on Mac)
-   - Safari: Press Cmd+Option+C (enable Developer menu in Preferences first)
-3. In the console, paste and run this command:
-   window.__reactRouterContext?.state?.loaderData?.root?.clientBootstrap?.session?.accessToken
-4. Copy the returned string (with or without quotes)
+2. Open this URL in the same browser: https://chatgpt.com/api/auth/session
+3. Copy the accessToken value from the JSON response
+   (You can paste the entire JSON or just the token value)
 `;
 
 /**
@@ -34,9 +30,44 @@ export function printTokenInstructions(): void {
 }
 
 /**
+ * Extracts the access token from user input.
+ * Handles three input formats:
+ * - Raw token string
+ * - Token with surrounding quotes
+ * - Full JSON response from the session endpoint
+ * @param input - The raw user input
+ * @returns The extracted access token
+ */
+function extractToken(input: string): string {
+    let token = input.trim();
+
+    // Try to parse as JSON (user pasted the full session response)
+    if (token.startsWith('{')) {
+        try {
+            const parsed = JSON.parse(token) as { accessToken?: string };
+            if (parsed.accessToken) {
+                return parsed.accessToken;
+            }
+        } catch {
+            // Not valid JSON, treat as raw token
+        }
+    }
+
+    // Remove surrounding quotes if present (makes copy-paste easier)
+    if (
+        (token.startsWith('"') && token.endsWith('"')) ||
+        (token.startsWith("'") && token.endsWith("'"))
+    ) {
+        token = token.slice(1, -1);
+    }
+
+    return token;
+}
+
+/**
  * Prompts the user to enter their ChatGPT access token.
- * Automatically strips surrounding quotes from the input for convenience.
- * @returns The entered access token (trimmed, quotes removed if present)
+ * Accepts the raw token, a quoted token, or the full JSON session response.
+ * @returns The entered access token (extracted and cleaned)
  */
 export async function promptForToken(): Promise<string> {
     const rl = readline.createInterface({
@@ -45,17 +76,9 @@ export async function promptForToken(): Promise<string> {
     });
 
     return new Promise(resolve => {
-        rl.question('Enter your ChatGPT access token: ', answer => {
+        rl.question('Enter your ChatGPT access token (or paste full JSON output): ', answer => {
             rl.close();
-            // Remove surrounding quotes if present (makes copy-paste easier)
-            let token = answer.trim();
-            if (
-                (token.startsWith('"') && token.endsWith('"')) ||
-                (token.startsWith("'") && token.endsWith("'"))
-            ) {
-                token = token.slice(1, -1);
-            }
-            resolve(token);
+            resolve(extractToken(answer));
         });
     });
 }
