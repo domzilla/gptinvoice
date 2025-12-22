@@ -11,6 +11,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';
+import * as TOML from 'smol-toml';
 
 describe('config', () => {
     let tempDir: string;
@@ -83,7 +84,7 @@ describe('config', () => {
             configModule.saveConfig({ accessToken: token });
 
             const content = fs.readFileSync(configModule.getConfigPath(), 'utf-8');
-            const parsed = JSON.parse(content);
+            const parsed = TOML.parse(content);
 
             expect(parsed.accessToken).toBe(token);
         });
@@ -103,12 +104,12 @@ describe('config', () => {
             expect(config?.accessToken).toBe(token);
         });
 
-        it('should return null for invalid JSON', () => {
+        it('should return null for invalid TOML', () => {
             const configDir = configModule.getConfigDir();
             const configPath = configModule.getConfigPath();
 
             fs.mkdirSync(configDir, { recursive: true });
-            fs.writeFileSync(configPath, 'not valid json', 'utf-8');
+            fs.writeFileSync(configPath, 'not valid toml = [', 'utf-8');
 
             expect(configModule.loadConfig()).toBeNull();
         });
@@ -118,7 +119,7 @@ describe('config', () => {
             const configPath = configModule.getConfigPath();
 
             fs.mkdirSync(configDir, { recursive: true });
-            fs.writeFileSync(configPath, JSON.stringify({ foo: 'bar' }), 'utf-8');
+            fs.writeFileSync(configPath, TOML.stringify({ foo: 'bar' }), 'utf-8');
 
             expect(configModule.loadConfig()).toBeNull();
         });

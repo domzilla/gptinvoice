@@ -12,6 +12,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';
+import * as TOML from 'smol-toml';
 
 /**
  * Configuration object stored in the config file.
@@ -47,7 +48,7 @@ export function configExists(): boolean {
 
 /**
  * Loads and validates the configuration from disk.
- * @returns The config object if valid, null if missing, invalid JSON, or missing accessToken
+ * @returns The config object if valid, null if missing, invalid TOML, or missing accessToken
  */
 export function loadConfig(): Config | null {
     if (!configExists()) {
@@ -56,7 +57,7 @@ export function loadConfig(): Config | null {
 
     try {
         const content = fs.readFileSync(getConfigPath(), 'utf-8');
-        const config = JSON.parse(content) as Config;
+        const config = TOML.parse(content) as unknown as Config;
 
         if (!config.accessToken || typeof config.accessToken !== 'string') {
             return null;
@@ -80,7 +81,7 @@ export function saveConfig(config: Config): void {
         fs.mkdirSync(configDir, { recursive: true, mode: 0o700 });
     }
 
-    fs.writeFileSync(getConfigPath(), JSON.stringify(config, null, 2), {
+    fs.writeFileSync(getConfigPath(), TOML.stringify(config), {
         encoding: 'utf-8',
         mode: 0o600,
     });
